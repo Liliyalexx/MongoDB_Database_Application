@@ -1,13 +1,10 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema({
- username: {
-    type: String, 
-    required: true,
-    minLength: 1, 
-    maxLength:20
-    }
-})
+  name: { type: String, required: true },
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+});
 
-userSchema.index({username: 1})
+const User = mongoose.model('User', userSchema);
 
-export default new mongoose.model('User', userSchema)
+export default User;

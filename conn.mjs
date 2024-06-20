@@ -10,10 +10,17 @@
 //     }
 // const mongoose = require('mongoose')
 import mongoose from 'mongoose'
-module.exports = function connectDB(){
-    mongoose.connect(process.env.ATLAS_URI)
-    const db = mongoose.connection
-    db.on('error', (e)=> console.log(e))
-    db.on('open', console.log('Connected to Mongo'))
-    db.on('close', ()=> console.log('MongoDB disconnected'))
-}
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.ATLAS_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('MongoDB connected');
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    process.exit(1);
+  }
+};
+
+export default connectDB;
