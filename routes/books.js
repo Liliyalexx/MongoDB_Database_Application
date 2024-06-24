@@ -1,8 +1,7 @@
 import express from 'express'
 import Book from '../models/Book.js';
-import Comment from '../models/Comment.js';
 import books from '../data/books.js';
-import comments from '../data/comments.js';
+
 
 const router = express.Router();
 

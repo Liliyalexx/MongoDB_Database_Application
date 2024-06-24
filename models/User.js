@@ -6,6 +6,11 @@ const userSchema = new mongoose.Schema({
   url: { type: String}
 });
 
+
+// Ensure unique index on username and email
+userSchema.index({ username: 1 }, { unique: true });
+userSchema.index({ email: 1 }, { unique: true });
+
 const User = mongoose.model('User', userSchema);
 
 export default User;

@@ -26,15 +26,9 @@ router.get('/:id', async (req, res) => {
 
 // POST a new user
 router.post('/', async (req, res) => {
-  const user = new User({
-    name: req.body.name,
-    username: req.body.username,
-    email: req.body.email,
-    
-  });
-
+  const { name, username, email } = req.body;
   try {
-    const newUser = await user.save();
+    const newUser = await User.create({ name, username, email });
     res.status(201).json(newUser);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -44,14 +38,10 @@ router.post('/', async (req, res) => {
 // PATCH update a user
 router.patch('/:id', async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
-
-    if (req.body.name != null) user.name = req.body.name;
-    if (req.body.username != null) user.username = req.body.username;
-    if (req.body.email != null) user.email = req.body.email;
-
-    const updatedUser = await user.save();
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
     res.json(updatedUser);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -61,10 +51,10 @@ router.patch('/:id', async (req, res) => {
 // DELETE a user
 router.delete('/:id', async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
-
-    await user.remove();
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    if (!deletedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
     res.json({ message: 'User deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
