@@ -1,4 +1,3 @@
-// routes/comments.js
 import express from 'express';
 import Comment from '../models/Comment.js';
 
@@ -17,7 +16,12 @@ router.get('/', async (req, res) => {
 // POST a new comment
 router.post('/', async (req, res) => {
   const { userId, bookId, body } = req.body;
-  const comment = new Comment({ userId, bookId, body });
+ const comment = new Comment({
+   userId,
+   bookId,
+   content: body,
+   author: req.body.author,
+ });
   try {
     const newComment = await comment.save();
     res.status(201).json(newComment);
@@ -30,9 +34,9 @@ router.post('/', async (req, res) => {
 // GET a comment by book ID
 router.get('/book/:bookId', async (req, res) => {
   try {
-    const comment = await Comment.find({bookId:req.params.bookId});
-    if (!comment) return res.status(404).json({ message: 'Comment not found' });
-    res.json(comment);
+    const comments = await Comment.find({bookId:req.params.bookId});
+    if (!comments) return res.status(404).json({ message: 'Comment not found' });
+    res.json(comments);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
