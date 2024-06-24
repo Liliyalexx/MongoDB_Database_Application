@@ -19,7 +19,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Ensure this is added
+app.use(express.urlencoded({ extended: true })); 
 app.use(express.static(path.join(__dirname, 'views')));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -29,16 +29,21 @@ app.use(cors());
 app.use('/api/books', booksRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/comments', commentsRouter);
-app.use('/api/login', loginRouter); 
+app.use('/api', loginRouter); 
+
+// Route for serving login.html
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
 
 // Route for creating a new book
 app.get('/books/new', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views/new-book.html'));
+  res.sendFile(path.join(__dirname, 'views', 'new-book.html'));
 });
 
 // Route for creating a new user
 app.get('/users/new', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views/new-user.html'));
+  res.sendFile(path.join(__dirname, 'views', 'new-user.html'));
 });
 
 
